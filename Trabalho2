@@ -1,0 +1,462 @@
+#include <iostream>
+#include <stdio.h>
+#include <string>
+#include <ctime>
+#include <vector>
+
+using namespace std;
+
+struct Livros {
+	int disponiveis; // aqui estarao os livros cadastrados 
+	int devolver;
+	int devolucao_vencida;
+	string titulo;
+	string editora;
+	string assunto;
+	string autor;
+	string disponivel;
+	int ano;
+};
+
+struct Revista {
+	int disponiveisR;
+	int devolverR;
+	int devolucao_vencidaR;
+	string tituloR;
+	string editoraR;
+	string assuntoR;
+	string autorR;
+	string disponivelR;
+	int anoR;
+};
+
+struct Autor {
+	string nome;
+	string sobrenome;
+};
+
+struct Usuario {
+	string cpf;
+	vector<Livros>livrosRetirados;
+
+};
+
+struct Editora {
+	string nome1;
+	string lugar;
+};
+
+
+vector<Livros> livros;
+vector<Revista> revistas;
+vector<Autor> autores;
+vector<Editora> editoras;
+vector<Usuario> usuarios;
+
+Livros cadastroLivro() {
+	Livros livro;
+
+	cout << "Dados do livro:" << endl;
+	cin.ignore();
+	cout << "\tTitulo do Livro: ";
+	getline(cin, livro.titulo);
+	cout << "\tNome do Autor: ";
+	getline(cin, livro.autor);
+	cout << "\tEditora: ";
+	getline(cin, livro.editora);
+	cout << "\tAno de Publicacao [1900-2023]: ";
+	cin >> livro.ano;
+	cin.ignore();
+	cout << "\tAssunto: ";
+	getline(cin, livro.assunto);
+	livros.push_back(livro);
+
+	return livro;
+}
+
+Autor cadastroAutor() {
+	Autor autor;
+
+	cout << "\tNome do Autor: ";
+	cin.ignore();
+	getline(cin, autor.nome);
+	cout << "\tSobrenome do Autor: ";
+	cin.ignore();
+	getline(cin, autor.sobrenome);
+	autores.push_back(autor);
+
+	return autor;
+}
+
+Revista cadastroRevista() {
+	Revista revista;
+
+	cout << "Dados da revista:" << endl;
+	cin.ignore();
+	cout << "\tTitulo da Revista: ";
+	getline(cin, revista.tituloR);
+	cout << "\tEditora: ";
+	getline(cin, revista.editoraR);
+	cout << "\tAno de Publicacao [1900-2023]: ";
+	cin >> revista.anoR;
+	cin.ignore();
+	cout << "\tAssunto: ";
+	getline(cin, revista.assuntoR);
+	revistas.push_back(revista);
+
+	return revista;
+}
+
+Usuario cadastroUsuario() {
+	Usuario dados3;
+
+	cout << "\tCPF do Usuario: ";
+	cin >> dados3.cpf;
+
+	return dados3;
+}
+
+Editora cadastroEditora() {
+	Editora editora;
+	cout << "\tNome da Editora: ";
+	cin.ignore();
+	getline(cin, editora.nome1);
+	editoras.push_back(editora);
+
+	return editora;
+}
+
+void mostrarLivro(Livros livro) {
+	cout << "Dados do livro:" << endl;
+	cout << "\tTitulo do Livro: " << livro.titulo << endl;
+	cout << "\tNome do autor: " << livro.autor << endl;
+	cout << "\tEditora: " << livro.editora << endl;
+	cout << "\tAno de Publicacao [1900-2023]: " << livro.ano << endl;
+	cout << "\tAssunto: " << livro.assunto << endl;
+}
+
+void mostrarAutor(Autor autor) {
+	cout << "Nome do autor: " << autor.nome << "" << autor.sobrenome << endl;
+}
+
+void mostrarRevista(Revista revista) {
+	cout << "Dados da Revista:" << endl;
+	cout << "\tTitulo da Revista: " << revista.tituloR << endl;
+	cout << "\tEditora: " << revista.editoraR << endl;
+	cout << "\tAno de Publicacao [1900-2023]: " << revista.anoR << endl;
+	cout << "\tAssunto: " << revista.assuntoR << endl;
+}
+
+void mostrarUsuario(Usuario dados3) {
+	cout << "CPF do Usuario: " << dados3.cpf << endl;
+}
+
+void mostrarEditora(Editora editora) {
+	cout << "Nome da Editora: " << editora.nome1 << endl;
+}
+
+int main()
+{
+	Livros* lista = nullptr;
+	Autor* listaAutor = nullptr;
+	Revista* listaRevista = nullptr;
+	Usuario* listaUsuario = nullptr;
+	Editora* listaEditora = nullptr;
+	int tamanho = 0;
+	int opcao, op, cont = 0, contRevista = 0, contAutor = 0, contUsuario = 0, contEditora = 0;
+	string nomeAutor, assuntoLivro, editoraLivro, nomeLivro, nomeRevista;
+	string opt;
+	char opt1;
+
+	do {
+		//menu
+		cout << "\t---BIBLIOTECA ONLINE---" << endl;
+		cout << endl;
+
+		cout << "[1] CADASTRO." << endl; //dentro dessa opcao tera pesquisar por autor, assunto, editora e nome do livro
+		cout << "[2] DISPONIBILIDADE" << endl; //aqui mostrara apenas os livros que estao em prazo de devolucao (contar tambem o do usuario)  e quantos dias faltam para devolucao
+		cout << "[3] USUARIOS." << endl; //e aqui mostrar quantos e quais livros/revistas o usuario retirou
+		cout << "[4] PESQUISAR" << endl;
+		cout << "[5] Sair." << endl; //sair
+		cin >> opcao;
+		system("cls");
+
+		switch (opcao) {
+		case 1:
+			do {
+				cout << "CADASTRAR:" << endl;
+				cout << "[1] Autor" << endl;
+				cout << "[2] Editora" << endl;
+				cout << "[3] Livro" << endl;
+				cout << "[4] Revista" << endl;
+				cout << "[5] Usuario" << endl;
+				cout << "[6] Voltar" << endl;
+				cin >> op;
+				system("cls");
+				switch (op) {
+				case 1:
+					cout << "--Cadastro de Autor--" << endl;
+					if (contAutor == tamanho) {
+						// Se o vetor estiver cheio, redimensiona
+						tamanho += 1;
+						Autor* temp = new Autor [tamanho];
+						for (int i = 0; i < contAutor; i++) {
+							temp[i] = listaAutor[i];
+						}
+						delete[] listaAutor;
+						listaAutor = temp;
+					}
+					listaAutor[contAutor] = cadastroAutor();
+					contAutor++;
+					system("pause");
+					system("cls");
+					break;
+				case 2:
+					cout << "--Cadastro de Editora--";
+					if (cont == tamanho) {
+						// Se o vetor estiver cheio, redimensiona
+						tamanho += 1;
+						Editora* temp = new Editora[tamanho];
+						for (int i = 0; i < contEditora; i++) {
+							temp[i] = listaEditora[i];
+						}
+						delete[] lista;
+						listaEditora = temp;
+					}
+					listaEditora[contEditora] = cadastroEditora();
+					contEditora++;
+					system("pause");
+					system("cls");
+					break;
+				case 3:
+					cout << "--Cadastro de Livro--";
+					if (cont == tamanho) {
+                                // Se o vetor estiver cheio, redimensiona
+                                tamanho += 1;
+                                Livros* temp = new Livros[tamanho];
+                                for (int i = 0; i < cont; i++) {
+                                    temp[i] = lista[i];
+                                }
+                                delete[] lista;
+                                lista = temp;
+                            }
+                            lista[cont] = cadastroLivro();
+                            cont++;
+                            system("pause");
+                            system("cls");
+                            break;
+				case 4:
+					cout << "--Cadastro de Revista--" << endl;
+					if (cont == tamanho) {
+						// Se o vetor estiver cheio, redimensiona
+						tamanho += 1;
+						Revista* temp = new Revista[tamanho];
+						for (int i = 0; i < contRevista; i++) {
+							temp[i] = listaRevista[i];
+						}
+						delete[] lista;
+						listaRevista = temp;
+					}
+					listaRevista[contRevista] = cadastroRevista();
+					contRevista++;
+					system("pause");
+					system("cls");
+					break;
+				case 5:
+					cout << "--Cadastro de Usuario--" << endl;
+					if (contUsuario == tamanho) {
+						// Se o vetor estiver cheio, redimensiona
+						tamanho += 1;
+						Usuario* temp = new Usuario[tamanho];
+						for (int i = 0; i < contUsuario; i++) {
+							temp[i] = listaUsuario[i];
+						}
+						delete[] lista;
+						listaUsuario = temp;
+					}
+					listaUsuario[contUsuario] = cadastroUsuario();
+					contUsuario++;
+					system("pause");
+					system("cls");
+					break;
+				case 6:
+					break;
+				default:
+					cout << "Opcao Invalida" << endl;
+				}
+			} while (op != 6);
+			break;
+		case 2:
+			do {
+				cout << "DISPONIBILIDADE POR:" << endl;
+				cout << "[1] AUTOR" << endl;
+				cout << "[2] EDITORA" << endl;
+				cout << "[3] LIVRO" << endl;
+				cout << "[4] REVISTA" << endl;
+				cout << "[5] Voltar" << endl;
+				cin >> op;
+				system("cls");
+				switch (op) {
+				case 1:
+					cout << "--Autores disponiveis--" << endl;
+					for (int i = 0; i < contAutor; i++) {
+						mostrarAutor(listaAutor[i]);
+						cout << endl;
+						system("pause");
+						system("cls");
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 2:
+					cout << "--Editoras disponiveis--";
+					for (int i = 0; i < contEditora; i++) {
+						mostrarEditora(listaEditora[i]);
+						cout << endl;
+						system("pause");
+						system("cls");
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 3:
+					cout << "--Livros disponiveis--" << endl;
+					for (int i = 0; i < cont; i++) {
+						mostrarLivro(lista[i]);
+						cout << endl;
+						system("pause");
+						system("cls");
+					}
+				case 4:
+					cout << "--Revistas disponiveis--" << endl;
+					for (int i = 0; i < contRevista; i++) {
+						mostrarRevista(listaRevista[i]);
+						cout << endl;
+						system("pause");
+						system("cls");
+					}
+				case 5:
+					break;
+				default:
+					cout << "Opcao Invalida" << endl;
+				}
+			} while (op != 5);
+			break;
+		case 3:
+			do {
+				cout << "--PORTAL DO USUARIO--" << endl;
+				cout << "[1]USUARIOS CADASTRADOS" << endl;
+				cout << "[2]HISTORICO DE RETIRADAS" << endl;
+				cout << "[3]PRAZO DE DEVOLUCAO" << endl;
+				cout << "[4]VOLTAR" << endl;
+				cin >> op;
+				system("cls");
+				switch (op) {
+				case 1:
+					for (int i = 0; i < contUsuario; i++) {
+						mostrarUsuario(listaUsuario[i]);
+						cout << endl;
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 2:
+					system("pause");
+					system("cls");
+					break;
+				case 3:
+					system("pause");
+					system("cls");
+					break;
+				}
+			} while (op != 4);
+			break;
+		case 4:
+			do {
+				cout << "Pesquisar por:" << endl;
+				cout << "[1] AUTOR" << endl;
+				cout << "[2] ASSUNTO" << endl;
+				cout << "[3] EDITORA" << endl;
+				cout << "[4] LIVRO" << endl;
+				cout << "[5] REVISTA" << endl;
+				cout << "[6] Voltar" << endl;
+				cin >> op;
+				system("cls");
+				switch (op) {
+				case 1:
+					cout << "Qual autor deseja encontrar? ";
+					cin >> nomeAutor;
+					for (int i = 0; i < 40; i++) {
+						if (nomeAutor == listaAutor[i].nome) {
+							mostrarLivro(lista[i]);
+						}
+						system("pause");
+						system("cls");
+					}
+					break;
+				case 2:
+					cout << "Tema desejado: ";
+					cin >> assuntoLivro;
+					for (int i = 0; i < 40; i++) {
+						if (assuntoLivro == lista[i].assunto) {
+							mostrarLivro(lista[i]);
+						}
+						else (assuntoLivro == listaRevista[i].assuntoR); {
+							mostrarRevista(listaRevista[i]);
+						}
+						system("pause");
+						system("cls");
+					}
+					break;
+				case 3:
+					cout << "Editora: ";
+					cin >> editoraLivro;
+					for (int i = 0; i < 40; i++) {
+						if (editoraLivro == lista[i].editora) {
+							mostrarLivro(lista[i]);
+						}
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 4:
+					cout << "Qual livro deseja encontrar?";
+					cin >> nomeLivro;
+					for (int i = 0; i < 40; i++) {
+						if (nomeLivro == lista[i].titulo) {
+							mostrarLivro(lista[i]);
+						}
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 5:
+					cout << "Qual revista deseja encontrar?";
+					cin >> nomeRevista;
+					for (int i = 0; i < 40; i++) {
+						if (nomeRevista == listaRevista[i].tituloR) {
+							mostrarRevista(listaRevista[i]);
+						}
+					}
+					system("pause");
+					system("cls");
+					break;
+				case 6:
+					break;
+				default:
+					cout << "Opcao Invalida" << endl;
+				}
+			} while (op != 6);
+			break;
+		case 5:
+			break;
+		default:
+			cout << "Opcao Invalida" << endl;
+		}
+	} while (opcao != 5);
+	delete[] lista;
+	delete[] listaAutor;
+	delete[] listaRevista;
+	delete[] listaUsuario;
+	delete[] listaEditora;
+}
